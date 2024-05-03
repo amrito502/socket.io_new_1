@@ -1,0 +1,47 @@
+#messages{
+    width: 350px;
+    background-color: rgb(245, 242, 245);
+    min-height: 500px;
+    margin: 100px;
+    box-shadow: 0px 0px 138px 153px #ed30ed;
+    border-radius: 20px;
+    border: 2px solid #822ff1;
+    
+}
+.main_chat_box{
+    position: relative;
+    width: 350px;
+}
+#messages > li{
+    padding: 30px 5px 0 10px;
+    list-style: none;
+    font-size: 20px;
+    text-transform: capitalize;
+
+}
+#msgform{
+    position: absolute;
+    bottom: 20px;
+    right: -100px;
+}
+.msg_input{
+    outline: 0;
+    border: 1px solid rgb(9, 9, 9);
+    padding: 13px 30px;
+}
+.msg_btn{
+    outline: 0;
+    border: 1px solid rgb(9, 9, 9);
+    padding: 10px 20px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s;
+}
+.msg_btn:hover{
+    background-color: #ed30ed;
+    color: #fff;
+    border: 1px solid #ed30ed;
+}
+#nameform{}
+.nameform_title{}

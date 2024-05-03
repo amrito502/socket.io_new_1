@@ -1,75 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socket.io practice</title>
-   
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.io || Chat App</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      #messages {
+        width: 350px;
+        background-color: rgb(245, 242, 245);
+        min-height: 500px;
+        margin: 100px;
+        box-shadow: 0px 0px 138px 153px #ed30ed;
+        border-radius: 20px;
+        border: 2px solid #822ff1;
+      }
+      .main_chat_box {
+        position: relative;
+        width: 600px;
+      }
+      #messages > li {
+        padding: 30px 5px 0 10px;
+        list-style: none;
+        font-size: 20px;
+        text-transform: capitalize;
+      }
+      #msgform {
+        position: absolute;
+        bottom: 20px;
+        right: 146px;
+      }
+      .msg_input {
+        outline: 0;
+        border: 1px solid rgb(9, 9, 9);
+        padding: 13px 30px;
+      }
+      .msg_btn {
+        outline: 0;
+        border: 1px solid rgb(9, 9, 9);
+        padding: 10px 20px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.5s;
+      }
+      .msg_btn:hover {
+        background-color: #ed30ed;
+        color: #fff;
+        border: 1px solid #ed30ed;
+      }
+      #nameform {
+        position: absolute;
+        bottom: 20px;
+        right: 121px;
+      }
+      .nameform_title {
+        margin-bottom: -68px;
+        margin-left: 112px;
+        padding-top: 65px;
+        font-size: 54px;
+    }
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="main_chat_box">
+        <h1 class="nameform_title">Chatting Room</h1>
+      <ul id="messages"></ul>
+      <form id="msgform">
+        <input class="msg_input" type="text" placeholder="Send Message.." />
+        <button class="msg_btn" type="submit">Send</button>
+      </form>
 
-    <ul id="messages">
+      <form id="nameform">
+        <input class="msg_input" type="text" placeholder="Enter Your Name.." />
+        <button class="msg_btn" type="submit">Join Room</button>
+      </form>
+    </div>
 
-    </ul>
-
-
-    <form id="msgform">
-        <h1>Enter Your Message</h1>
-        <input type="text">
-        <button type="submit">Send</button>
-    </form>
-
-    <form id="nameform">
-        <h1>Enter Your Name</h1>
-        <input type="text">
-        <button type="submit">Send</button>
-    </form>
-
+    
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const msgform = document.getElementById("msgform")
-        msgform.hidden = true
-        const nameform = document.getElementById("nameform")
-        const messages = document.getElementById("messages")
+      const msgform = document.getElementById("msgform");
+      msgform.hidden = true;
+      const nameform = document.getElementById("nameform");
+      const messages = document.getElementById("messages");
 
-        var socket = io();
-        
+      var socket = io();
 
-        socket.on("receive_msg", (msg, name) => {
-            displayMsg(msg, name)
-        })
+      socket.on("receive_msg", (msg, name) => {
+        displayMsg(msg, name);
+      });
 
-        socket.on('getName', () => {
-            nameform.addEventListener('submit', (e) => {
-                e.preventDefault()
-                const name = nameform[0].value
-                if(!name) return;
-                socket.emit('setName', name, () => {
-                    msgform.hidden = false
-                    nameform.hidden = true
-                })
-                nameform[0].value = ""
-            })
-        })
+      socket.on("getName", () => {
+        nameform.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = nameform[0].value;
+          if (!name) return;
+          socket.emit("setName", name, () => {
+            msgform.hidden = false;
+            nameform.hidden = true;
+          });
+          nameform[0].value = "";
+        });
+      });
 
-        msgform.addEventListener('submit', (e) => {
-            e.preventDefault()
-            const msg = msgform[0].value
-            if(!msg) return;
-            socket.emit("new-message", msg, () => {
-                displayMsg(msg, "You")
-                msgform[0].value = ""
-            })
-        })
+      msgform.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const msg = msgform[0].value;
+        if (!msg) return;
+        socket.emit("new-message", msg, () => {
+          displayMsg(msg, "You");
+          msgform[0].value = "";
+        });
+      });
 
-
-        function displayMsg(msg, name){
-            const li = document.createElement('li')
-            li.textContent = name + ": " + msg
-            messages.appendChild(li)
-        }
-       
+      function displayMsg(msg, name) {
+        const li = document.createElement("li");
+        li.textContent = name + ": " + msg;
+        messages.appendChild(li);
+      }
     </script>
-</body>
+  </body>
 </html>
