@@ -8,30 +8,67 @@
 </head>
 <body>
 
+    <ul id="messages">
 
-    <form id="form">
+    </ul>
+
+
+    <form id="msgform">
+        <h1>Enter Your Message</h1>
+        <input type="text">
+        <button type="submit">Send</button>
+    </form>
+
+    <form id="nameform">
+        <h1>Enter Your Name</h1>
         <input type="text">
         <button type="submit">Send</button>
     </form>
 
 
     <script src="/socket.io/socket.io.js"></script>
-    <script defer>
-        const form = document.getElementById("form")
+    <script>
+        const msgform = document.getElementById("msgform")
+        msgform.hidden = true
+        const nameform = document.getElementById("nameform")
+        const messages = document.getElementById("messages")
 
         var socket = io();
-        setTimeout(() => {
-             socket.emit("new-message", "hi")
-        }, 1000)
+        
 
-        socket.on("receive_msg", (msg) => {
-            console.log(msg)
+        socket.on("receive_msg", (msg, name) => {
+            displayMsg(msg, name)
         })
 
-        form.addEventListener('submit', (e) => {
+        socket.on('getName', () => {
+            nameform.addEventListener('submit', (e) => {
+                e.preventDefault()
+                const name = nameform[0].value
+                if(!name) return;
+                socket.emit('setName', name, () => {
+                    msgform.hidden = false
+                    nameform.hidden = true
+                })
+                nameform[0].value = ""
+            })
+        })
+
+        msgform.addEventListener('submit', (e) => {
             e.preventDefault()
-            
+            const msg = msgform[0].value
+            if(!msg) return;
+            socket.emit("new-message", msg, () => {
+                displayMsg(msg, "You")
+                msgform[0].value = ""
+            })
         })
+
+
+        function displayMsg(msg, name){
+            const li = document.createElement('li')
+            li.textContent = name + ": " + msg
+            messages.appendChild(li)
+        }
        
     </script>
 </body>

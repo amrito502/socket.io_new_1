@@ -11,9 +11,17 @@ app.get("/", (req, res) => {
 
 
 io.on('connection', (socket) => {
-    console.log("New user connected!");
-    socket.on("new-message", (msg) => {
-        socket.broadcast.emit("receive_msg", msg)
+   io.to(socket.id).emit('getName')
+   
+
+    socket.on("new-message", (msg, cb) => {
+        socket.broadcast.emit("receive_msg", msg, socket.name)
+        cb()
+    })
+
+    socket.on("setName", (name, cb) => {
+      socket.name = name
+      cb()
     })
 })
 
