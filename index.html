@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socket.io practice</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-    </script>
+   
 </head>
 <body>
-    
+
+
+    <form id="form">
+        <input type="text">
+        <button type="submit">Send</button>
+    </form>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script defer>
+        const form = document.getElementById("form")
+
+        var socket = io();
+        setTimeout(() => {
+             socket.emit("new-message", "hi")
+        }, 1000)
+
+        socket.on("receive_msg", (msg) => {
+            console.log(msg)
+        })
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            
+        })
+       
+    </script>
 </body>
 </html>

@@ -9,6 +9,17 @@ app.get("/", (req, res) => {
     res.sendFile(`${__dirname}/index.html`)
 })
 
+
+io.on('connection', (socket) => {
+    console.log("New user connected!");
+    socket.on("new-message", (msg) => {
+        socket.broadcast.emit("receive_msg", msg)
+    })
+})
+
+
+
+
 expressHTTPServer.listen(3000, () => {
     console.log("Server is running on port @3000")
 })
